@@ -478,6 +478,8 @@ internal extension SKPhotoBrowser {
                 UIView.setAnimationCurve(UIView.AnimationCurve.easeIn)
                 zoomingScrollView.center = CGPoint(x: finalX, y: finalY)
                 UIView.commitAnimations()
+                
+                setControlsHidden(false, animated: true, permanent: false)
             }
         }
     }
