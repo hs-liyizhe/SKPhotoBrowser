@@ -8,9 +8,14 @@
 
 import UIKit.UIImage
 
+import UIKit.UIImage
+public typealias SKCachedImageClosure = (UIImage?) -> Void
 public protocol SKCacheable {}
 public protocol SKImageCacheable: SKCacheable {
-    func imageForKey(_ key: String) -> UIImage?
+    func imageForKey(
+        _ key: String,
+        _ cachedImageClosure:@escaping SKCachedImageClosure
+    )
     func setImage(_ image: UIImage, forKey key: String)
     func removeImageForKey(_ key: String)
     func removeAllImages()

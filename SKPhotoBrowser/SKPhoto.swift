@@ -63,8 +63,10 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
                 underlyingImage = img
             }
         } else {
-            if let img = SKCache.sharedCache.imageForKey(photoURL) {
-                underlyingImage = img
+            SKCache.sharedCache.imageForKey(photoURL) { img in
+                if let img {
+                    self.underlyingImage = img
+                }
             }
         }
     }
@@ -80,20 +82,27 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
                         self.underlyingImage = img
                         self.loadUnderlyingImageComplete()
                     }
-                    return
+                } else {
+                    fetchImage(URL)
                 }
             } else {
-                if let img = SKCache.sharedCache.imageForKey(photoURL) {
-                    DispatchQueue.main.async {
-                        self.underlyingImage = img
-                        self.loadUnderlyingImageComplete()
+                SKCache.sharedCache.imageForKey(photoURL) { img in
+                    if let img {
+                        DispatchQueue.main.async {
+                            self.underlyingImage = img
+                            self.loadUnderlyingImageComplete()
+                        }
+                    } else {
+                        self.fetchImage(URL)
                     }
-                    return
                 }
             }
+        } else {
+            
         }
-
-        // Fetch Image
+    }
+    
+    func fetchImage(_ URL: URL) {
         let session = URLSession(configuration: SKPhotoBrowserOptions.sessionConfiguration)
             var task: URLSessionTask?
             task = session.dataTask(with: URL, completionHandler: { [weak self] (data, response, error) in

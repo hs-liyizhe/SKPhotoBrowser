@@ -16,12 +16,17 @@ open class SKCache {
         self.imageCache = SKDefaultImageCache()
     }
 
-    open func imageForKey(_ key: String) -> UIImage? {
+    open func imageForKey(
+        _ key: String,
+        _ cachedImageClosure:@escaping SKCachedImageClosure
+    ){
         guard let cache = imageCache as? SKImageCacheable else {
-            return nil
+            cachedImageClosure(nil)
+            return
         }
-        
-        return cache.imageForKey(key)
+        cache.imageForKey(key) { image in
+            cachedImageClosure(image)
+        }
     }
 
     open func setImage(_ image: UIImage, forKey key: String) {
@@ -69,15 +74,18 @@ open class SKCache {
 }
 
 class SKDefaultImageCache: SKImageCacheable {
+    func imageForKey(_ key: String, _ cachedImageClosure: (UIImage?) -> Void) {
+        let image = cache.object(forKey: key as AnyObject) as? UIImage
+        cachedImageClosure(image)
+    }
+
     var cache: NSCache<AnyObject, AnyObject>
 
     init() {
         cache = NSCache()
     }
 
-    func imageForKey(_ key: String) -> UIImage? {
-        return cache.object(forKey: key as AnyObject) as? UIImage
-    }
+    
 
     func setImage(_ image: UIImage, forKey key: String) {
         cache.setObject(image, forKey: key as AnyObject)
