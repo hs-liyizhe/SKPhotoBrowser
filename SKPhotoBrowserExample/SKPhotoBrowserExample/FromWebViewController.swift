@@ -17,6 +17,7 @@ class FromWebViewController: UIViewController, SKPhotoBrowserDelegate {
         super.viewDidLoad()
         
         SKCache.sharedCache.imageCache = CustomImageCache()
+        
     }
     
     @IBAction func pushJpgPngButton(_ sender: AnyObject) {
@@ -81,15 +82,29 @@ private extension FromWebViewController {
 }
 
 class CustomImageCache: SKImageCacheable {
+    func imageForKey(
+        _ key: String,
+        _ cachedImageClosure: SKCachedImageClosure
+    ) {
+        let image = cache?.imageFromDiskCache(forKey: key)
+        cachedImageClosure(image)
+        
+    }
+
     var cache: SDImageCache?
     
     init() {
         let cache = SDImageCache(namespace: "com.suzuki.custom.cache")
+        self.cache = cache
     }
 
-    func imageForKey(_ key: String) -> UIImage? { return cache?.imageFromDiskCache(forKey: key) }
+    func imageForKey(_ key: String) -> UIImage? {
+        return cache?.imageFromDiskCache(forKey: key)
+    }
 
-    func setImage(_ image: UIImage, forKey key: String) { cache?.store(image, forKey: key) }
+    func setImage(_ image: UIImage, forKey key: String) {
+        cache?.store(image, forKey: key)
+    }
 
     func removeImageForKey(_ key: String) {}
     
