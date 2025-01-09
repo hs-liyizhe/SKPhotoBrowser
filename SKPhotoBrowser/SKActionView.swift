@@ -10,7 +10,7 @@ import UIKit
 
 class SKActionView: UIView {
     internal weak var browser: SKPhotoBrowser?
-    internal var closeButton: SKCloseButton!
+    internal var closeButton: UIButton!
     internal var deleteButton: SKDeleteButton!
     
     // Action
@@ -56,7 +56,10 @@ class SKActionView: UIView {
     }
     
     func animate(hidden: Bool) {
+        
+        /** 2025-9-1，用 alpha 效果已经足够了，frame 这个属性舍弃了
         let closeFrame: CGRect = hidden ? closeButton.hideFrame : closeButton.showFrame
+         */
         let deleteFrame: CGRect = hidden ? deleteButton.hideFrame : deleteButton.showFrame
         UIView.animate(withDuration: 0.35,
                        animations: { () -> Void in
@@ -64,7 +67,7 @@ class SKActionView: UIView {
 
                         if SKPhotoBrowserOptions.displayCloseButton {
                             self.closeButton.alpha = alpha
-                            self.closeButton.frame = closeFrame
+                            // self.closeButton.frame = closeFrame
                         }
                         if SKPhotoBrowserOptions.displayDeleteButton {
                             self.deleteButton.alpha = alpha
@@ -89,15 +92,26 @@ class SKActionView: UIView {
 extension SKActionView {
     func configureCloseButton(image: UIImage? = nil, size: CGSize? = nil) {
         if closeButton == nil {
-            closeButton = SKCloseButton(frame: .zero)
+            var top: CGFloat = 20
+            if #available(iOS 11.0, *) {
+                top =  UIApplication.shared.windows.first?.safeAreaInsets.top ?? 20
+            }
+            closeButton = UIButton.init(
+                frame: .init(
+                    origin: .init(x: 0, y: top),
+                    size: size ?? .init(width: 44, height: 44)
+                )
+            )
             closeButton.addTarget(self, action: #selector(closeButtonPressed(_:)), for: .touchUpInside)
             closeButton.isHidden = !SKPhotoBrowserOptions.displayCloseButton
+            closeButton.contentMode = .scaleAspectFill
             addSubview(closeButton)
         }
 
-        if let size = size {
-            closeButton.setFrameSize(size)
-        }
+        if let size {
+            let frame = CGRect.init(origin: closeButton.frame.origin, size: size)
+            closeButton.frame = frame
+        }        
         
         if let image = image {
             closeButton.setImage(image, for: .normal)

@@ -16,17 +16,19 @@ class FromLocalViewController: UIViewController, UICollectionViewDataSource, UIC
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Static setup
         SKPhotoBrowserOptions.displayAction = true
         SKPhotoBrowserOptions.displayStatusbar = true
-        SKPhotoBrowserOptions.displayCounterLabel = true
         SKPhotoBrowserOptions.displayBackAndForwardButton = true
-
+        
         setupTestData()
         setupCollectionView()
+        
+        //        SKPhotoBrowserOptions.enableSingleTapDismiss = true
+        
     }
-
+    
     override var prefersStatusBarHidden: Bool {
         return false
     }
@@ -60,6 +62,10 @@ extension FromLocalViewController {
         browser.delegate = self
 
         present(browser, animated: true, completion: {})
+        browser.updateCloseButton(
+            .init(named: "nav_back")!,
+            size: .init(width: 44, height: 44)
+        )
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
@@ -99,13 +105,17 @@ extension FromLocalViewController {
     func removePhoto(_ browser: SKPhotoBrowser, index: Int, reload: @escaping (() -> Void)) {
         reload()
     }
-
+    
     func viewForPhoto(_ browser: SKPhotoBrowser, index: Int) -> UIView? {
         return collectionView.cellForItem(at: IndexPath(item: index, section: 0))
     }
     
     func captionViewForPhotoAtIndex(index: Int) -> SKCaptionView? {
         return nil
+    }
+    
+    func controlsVisibilityToggled(_ browser: SKPhotoBrowser, hidden: Bool) {
+        print("browser hidden: \(hidden)")
     }
 }
 
