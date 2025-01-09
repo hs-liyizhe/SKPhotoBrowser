@@ -53,7 +53,16 @@ class SKPaginationView: UIView {
     }
     
     func updateFrame(frame: CGRect) {
-        self.frame = CGRect(x: 0, y: frame.height - margin, width: frame.width, height: 100)
+        /*
+         调整 originY 为 safeAreaInsets.top，和 close button 一致
+         */
+        var topMargin: CGFloat = 20
+        if #available(iOS 11.0, *) {
+            if let topEdge = UIApplication.shared.windows.first?.safeAreaInsets.top {
+                topMargin = topEdge
+            }
+        }
+        self.frame = CGRect(x: 0, y: topMargin, width: frame.width, height: 100)
     }
     
     func update(_ currentPageIndex: Int) {
@@ -88,8 +97,12 @@ private extension SKPaginationView {
     func setupCounterLabel() {
         guard SKPhotoBrowserOptions.displayCounterLabel else { return }
         
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-        label.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
+        /*
+         设置 label height 高度为 44，和 close button 一致
+         */
+        let labelHeight: CGFloat = 44
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: labelHeight))
+        label.center = CGPoint(x: frame.width / 2, y: labelHeight / 2)
         label.textAlignment = .center
         label.backgroundColor = .clear
         label.shadowColor = SKToolbarOptions.textShadowColor
@@ -100,7 +113,7 @@ private extension SKPaginationView {
         label.autoresizingMask = [.flexibleBottomMargin,
                                   .flexibleLeftMargin,
                                   .flexibleRightMargin,
-                                  .flexibleTopMargin]
+                                  ]
         addSubview(label)
         counterLabel = label
     }

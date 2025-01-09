@@ -24,9 +24,10 @@ class FromLocalViewController: UIViewController, UICollectionViewDataSource, UIC
         
         setupTestData()
         setupCollectionView()
-        
-        //        SKPhotoBrowserOptions.enableSingleTapDismiss = true
-        
+        SKToolbarOptions.font = .systemFont(ofSize: 18)
+        SKPhotoBrowserOptions.enableSingleTapDismiss = true
+        SKPhotoBrowserOptions.displayAction = false
+        SKPhotoBrowserOptions.displayBackAndForwardButton = false
     }
     
     override var prefersStatusBarHidden: Bool {
