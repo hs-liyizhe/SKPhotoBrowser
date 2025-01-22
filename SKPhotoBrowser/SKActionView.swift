@@ -105,6 +105,13 @@ extension SKActionView {
             closeButton.addTarget(self, action: #selector(closeButtonPressed(_:)), for: .touchUpInside)
             closeButton.isHidden = !SKPhotoBrowserOptions.displayCloseButton
             closeButton.contentMode = .scaleAspectFill
+            
+            // 添加阴影
+            closeButton.layer.shadowColor = UIColor.black.cgColor  // 阴影颜色
+            closeButton.layer.shadowOffset = CGSize(width: 0, height: 2)  // 阴影偏移量
+            closeButton.layer.shadowOpacity = 0.5  // 阴影透明度 (0 - 1)
+            closeButton.layer.shadowRadius = 4  // 阴影模糊半径
+            
             addSubview(closeButton)
         }
 

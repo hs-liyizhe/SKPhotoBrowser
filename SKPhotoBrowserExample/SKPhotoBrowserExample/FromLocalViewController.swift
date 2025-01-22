@@ -64,7 +64,7 @@ extension FromLocalViewController {
 
         present(browser, animated: true, completion: {})
         browser.updateCloseButton(
-            .init(named: "nav_back")!,
+            .init(named: "3x_50")!,
             size: .init(width: 44, height: 44)
         )
     }
