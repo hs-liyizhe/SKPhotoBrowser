@@ -98,7 +98,7 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
                 }
             }
         } else {
-            
+            fetchImage(URL)
         }
     }
     
