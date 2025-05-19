@@ -87,18 +87,24 @@ class SKActionView: UIView {
             self?.browser?.deleteImage()
         }
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if let closeButton {
+            closeButton.frame.origin = safeAreaAdjustedPosition()
+        }
+    }
 }
 
 extension SKActionView {
     func configureCloseButton(image: UIImage? = nil, size: CGSize? = nil) {
         if closeButton == nil {
-            var top: CGFloat = 20
-            if #available(iOS 11.0, *) {
-                top =  UIApplication.shared.windows.first?.safeAreaInsets.top ?? 20
-            }
+            let origin = safeAreaAdjustedPosition()
+            
             closeButton = UIButton.init(
                 frame: .init(
-                    origin: .init(x: 0, y: top),
+                    origin: origin,
                     size: size ?? .init(width: 44, height: 44)
                 )
             )
@@ -118,7 +124,7 @@ extension SKActionView {
         if let size {
             let frame = CGRect.init(origin: closeButton.frame.origin, size: size)
             closeButton.frame = frame
-        }        
+        }
         
         if let image = image {
             closeButton.setImage(image, for: .normal)
@@ -141,4 +147,18 @@ extension SKActionView {
             deleteButton.setImage(image, for: .normal)
         }
     }
+    
+    private func safeAreaAdjustedPosition() -> CGPoint {
+        var top: CGFloat = 20
+        var left: CGFloat = 0
+        
+        if #available(iOS 11.0, *) {
+            let safeAreaInsets = UIApplication.shared.windows.first?.safeAreaInsets
+            top = safeAreaInsets?.top ?? 20
+            left = safeAreaInsets?.left ?? 0
+        }
+        
+        return CGPoint(x: left, y: top)
+    }
+    
 }
