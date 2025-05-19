@@ -36,6 +36,7 @@ class SKPaginationView: UIView {
         setupNextButton()
         
         update(browser?.currentPageIndex ?? 0)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -86,6 +87,42 @@ class SKPaginationView: UIView {
                        animations: { () -> Void in self.alpha = alpha },
                        completion: nil)
     }
+    
+    func updateCounterLabelUI() {
+        guard let counterLabel = counterLabel else { return }
+
+        let isLandscape = UIDevice.current.orientation.isValidInterfaceOrientation ?
+                          UIDevice.current.orientation.isLandscape :
+                          UIScreen.main.bounds.width > UIScreen.main.bounds.height
+        
+        let labelHeight: CGFloat = 44
+        var offsetY: CGFloat = 0
+        
+        if isLandscape {
+            counterLabel.backgroundColor = .white
+            counterLabel.layer.cornerRadius = 22
+            counterLabel.textColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+            
+            offsetY = 16
+        } else {
+            counterLabel.backgroundColor = .clear
+            counterLabel.layer.cornerRadius = 0
+            counterLabel.textColor = .white
+            
+            offsetY = 0
+        }
+        
+        counterLabel.center = CGPoint(x: frame.width / 2, y: labelHeight / 2 + offsetY)
+    }
+    
+    @objc private func handleOrientationChange() {
+        updateCounterLabelUI()
+    }
+    
+    deinit {
+        print("\(#file) deinit")
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 private extension SKPaginationView {
@@ -101,10 +138,11 @@ private extension SKPaginationView {
          设置 label height 高度为 44，和 close button 一致
          */
         let labelHeight: CGFloat = 44
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: labelHeight))
-        label.center = CGPoint(x: frame.width / 2, y: labelHeight / 2)
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 86, height: labelHeight))
         label.textAlignment = .center
-        label.backgroundColor = .clear
+        label.backgroundColor = .white
+        label.layer.cornerRadius = 22
+        label.clipsToBounds = true
         label.shadowColor = SKToolbarOptions.textShadowColor
         label.shadowOffset = CGSize(width: 0.0, height: 1.0)
         label.font = SKToolbarOptions.font
@@ -116,6 +154,7 @@ private extension SKPaginationView {
                                   ]
         addSubview(label)
         counterLabel = label
+        updateCounterLabelUI()
     }
     
     func setupPrevButton() {

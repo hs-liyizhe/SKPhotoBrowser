@@ -158,6 +158,13 @@ extension SKActionView {
             left = safeAreaInsets?.left ?? 0
         }
         
+        let isLandscape = UIDevice.current.orientation.isValidInterfaceOrientation ?
+                          UIDevice.current.orientation.isLandscape :
+                          UIScreen.main.bounds.width > UIScreen.main.bounds.height
+        if isLandscape {
+            top += 16 // align with counterLabel in landscape mode
+        }
+        
         return CGPoint(x: left, y: top)
     }
     
