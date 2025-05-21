@@ -13,7 +13,7 @@ import SKPhotoBrowserObjC
 
 @objc public protocol SKPhotoProtocol: NSObjectProtocol {
     var index: Int { get set }
-    var underlyingImage: UIImage! { get }
+    var underlyingImage: UIImage! { get set }
     var caption: String? { get }
     var contentMode: UIView.ContentMode { get set }
     func loadUnderlyingImageAndNotify()

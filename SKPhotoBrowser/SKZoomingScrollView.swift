@@ -162,6 +162,7 @@ open class SKZoomingScrollView: UIScrollView {
     }
     
     open func prepareForReuse() {
+        photo.underlyingImage = nil
         photo = nil
         if captionView != nil {
             captionView.removeFromSuperview()
