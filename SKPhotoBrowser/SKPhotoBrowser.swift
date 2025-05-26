@@ -262,6 +262,11 @@ open class SKPhotoBrowser: UIViewController {
             present(activityViewController, animated: true, completion: nil)
         }
     }
+    
+    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        delegate?.browserWillTransition?(to: size, with: coordinator)
+    }
 }
 
 // MARK: - Public Function For Customizing Buttons

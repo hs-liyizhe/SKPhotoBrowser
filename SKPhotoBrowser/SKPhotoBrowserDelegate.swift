@@ -86,5 +86,10 @@ import UIKit
      - Parameter index: the index of the photo
      */
     @objc optional func captionViewForPhotoAtIndex(index: Int) -> SKCaptionView?
+    
+    /**
+     Allows the delegate to detect orientation changes
+     */
+    @objc optional func  browserWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
 }
 
