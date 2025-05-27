@@ -104,11 +104,13 @@ class SKPaginationView: UIView {
             counterLabel.textColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
             
             offsetY = 16
+            counterLabel.font = SKToolbarOptions.fontInLandscape
         } else {
             counterLabel.backgroundColor = .clear
             counterLabel.layer.cornerRadius = 0
             counterLabel.textColor = .white
             
+            counterLabel.font = SKToolbarOptions.font
             offsetY = 0
         }
         
@@ -145,7 +147,6 @@ private extension SKPaginationView {
         label.clipsToBounds = true
         label.shadowColor = SKToolbarOptions.textShadowColor
         label.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        label.font = SKToolbarOptions.font
         label.textColor = SKToolbarOptions.textColor
         label.translatesAutoresizingMaskIntoConstraints = true
         label.autoresizingMask = [.flexibleBottomMargin,
