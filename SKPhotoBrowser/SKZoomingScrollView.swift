@@ -50,6 +50,11 @@ open class SKZoomingScrollView: UIScrollView {
     }
     
     func setup() {
+        
+        if #available(iOS 11.0, *) {
+            contentInsetAdjustmentBehavior = .never
+        }
+        
         // tap
         tapView = SKDetectingView(frame: bounds)
         tapView.delegate = self
